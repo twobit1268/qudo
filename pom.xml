@@ -21,5 +21,18 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- Logging: API at compile, Core at test for appender utilities -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>3.0.0-beta2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>3.0.0-beta3</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
