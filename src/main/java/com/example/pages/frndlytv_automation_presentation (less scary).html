@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>frndlyTV Automation Testing Strategy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .presentation-header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .presentation-header h1 {
+            font-size: 3em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .presentation-header .subtitle {
+            font-size: 1.3em;
+            color: #7f8c8d;
+            font-weight: 300;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+        }
+
+        .slide h2 {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .slide h3 {
+            font-size: 1.5em;
+            color: #34495e;
+            margin: 25px 0 15px 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            font-weight: bold;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .comparison-table tr:hover {
+            background-color: #e3f2fd;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pros, .cons {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .pros {
+            background: linear-gradient(135deg, #d5f4e6, #c8e6c9);
+            border-left: 5px solid #4caf50;
+        }
+
+        .cons {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            border-left: 5px solid #f44336;
+        }
+
+        .pros h4, .cons h4 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-block .keyword {
+            color: #f6ad55;
+        }
+
+        .code-block .string {
+            color: #68d391;
+        }
+
+        .code-block .comment {
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        .architecture-diagram {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .flow-item {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .arrow {
+            font-size: 1.5em;
+            color: #666;
+            margin: 0 10px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #fef5e7, #fed7aa);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #f6ad55;
+        }
+
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigation a {
+            display: block;
+            color: #3498db;
+            text-decoration: none;
+            margin: 5px 0;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .navigation a:hover {
+            color: #2980b9;
+        }
+
+        .challenge-section {
+            background: linear-gradient(135deg, #fff5f5, #fed7d7);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #e53e3e;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="#overview">Overview</a>
+        <a href="#ui-testing">UI Testing</a>
+        <a href="#performance">Performance</a>
+        <a href="#ci-cd">CI/CD</a>
+        <a href="#roku">Roku API</a>
+        <a href="#challenges">Challenges</a>
+        <a href="#poc">POC Demo</a>
+    </div>
+
+    <div class="container">
+        <div class="presentation-header">
+            <h1>frndlyTV Automation Testing Strategy</h1>
+            <div class="subtitle">Comprehensive Testing Framework for Streaming Platform Excellence</div>
+        </div>
+
+        <div class="slide" id="overview">
+            <h2>🎯 Automation Testing Overview</h2>
+            <p>A comprehensive testing strategy for frndlyTV's streaming platform covering:</p>
+            <ul>
+                <li><strong>Web UI Testing:</strong> Selenium vs Playwright comparison and implementation</li>
+                <li><strong>Performance Testing:</strong> Load testing with JMeter and k6</li>
+                <li><strong>CI/CD Integration:</strong> Jenkins and GitHub Actions pipelines</li>
+                <li><strong>Device Testing:</strong> Roku API testing and device compatibility</li>
+                <li><strong>Technical Challenges:</strong> Implementation considerations and solutions</li>
+                <li><strong>Proof of Concept:</strong> Working Selenium implementation with Page Object Model</li>
+            </ul>
+        </div>
+
+        <div class="slide" id="ui-testing">
+            <h2>🖥️ Web UI Testing: Selenium vs Playwright</h2>
+            
+            <h3>Feature Comparison</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Selenium</th>
+                        <th>Playwright</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Browser Support</td>
+                        <td>Chrome, Firefox, Safari, Edge</td>
+                        <td>Chrome, Firefox, Safari, Edge (built-in)</td>
+                    </tr>
+                    <tr>
+                        <td>Language Support</td>
+                        <td>Java, Python, C#, JavaScript, Ruby</td>
+                        <td>JavaScript, Python, C#, Java</td>
+                    </tr>
+                    <tr>
+                        <td>Speed</td>
+                        <td>Moderate (WebDriver protocol)</td>
+                        <td>Fast (Direct browser API)</td>
+                    </tr>
+                    <tr>
+                        <td>Setup Complexity</td>
+                        <td>Requires driver management</td>
+                        <td>Zero-config browser installation</td>
+                    </tr>
+                    <tr>
+                        <td>Parallel Testing</td>
+                        <td>Requires external tools (TestNG, etc.)</td>
+                        <td>Built-in parallel execution</td>
+                    </tr>
+                    <tr>
+                        <td>Network Interception</td>
+                        <td>Limited (requires proxy)</td>
+                        <td>Native support</td>
+                    </tr>
+                    <tr>
+                        <td>Auto-wait</td>
+                        <td>Manual waits required</td>
+                        <td>Intelligent auto-waiting</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>✅ Selenium Advantages</h4>
+                    <ul>
+                        <li>Mature ecosystem (15+ years)</li>
+                        <li>Large community support</li>
+                        <li>Extensive documentation</li>
+                        <li>Enterprise adoption</li>
+                        <li>Grid support for scaling</li>
+                        <li>Wide language support</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚡ Playwright Advantages</h4>
+                    <ul>
+                        <li>Modern architecture</li>
+                        <li>Better performance</li>
+                        <li>Built-in features (screenshots, videos)</li>
+                        <li>Better debugging tools</li>
+                        <li>Native mobile testing</li>
+                        <li>Network manipulation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <strong>Recommendation for frndlyTV:</strong> Start with Selenium for web testing due to team familiarity and enterprise support, but evaluate Playwright for new test suites, especially for mobile web testing and complex interactions.
+            </div>
+        </div>
+
+        <div class="slide" id="performance">
+            <h2>⚡ Performance Testing: JMeter vs k6</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>JMeter</th>
+                        <th>k6</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Scripting</td>
+                        <td>GUI-based + XML configs</td>
+                        <td>JavaScript-based scripting</td>
+                    </tr>
+                    <tr>
+                        <td>Resource Usage</td>
+                        <td>Heavy (Java-based)</td>
+                        <td>Lightweight (Go-based)</td>
+                    </tr>
+                    <tr>
+                        <td>Learning Curve</td>
+                        <td>Moderate (GUI helps beginners)</td>
+                        <td>Easy for developers</td>
+                    </tr>
+                    <tr>
+                        <td>CI/CD Integration</td>
+                        <td>Good (requires setup)</td>
+                        <td>Excellent (CLI-first)</td>
+                    </tr>
+                    <tr>
+                        <td>Reporting</td>
+                        <td>Built-in HTML reports</td>
+                        <td>JSON output + external dashboards</td>
+                    </tr>
+                    <tr>
+                        <td>Protocol Support</td>
+                        <td>HTTP, SOAP, FTP, JDBC, etc.</td>
+                        <td>HTTP, WebSocket, gRPC</td>
+                    </tr>
+                    <tr>
+                        <td>Scalability</td>
+                        <td>Distributed testing capability</td>
+                        <td>Cloud-native scaling</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Streaming Platform Specific Considerations</h3>
+            <ul>
+                <li><strong>Video Streaming Load:</strong> Test concurrent video streams and bandwidth usage</li>
+                <li><strong>CDN Performance:</strong> Validate content delivery network response times</li>
+                <li><strong>Authentication Load:</strong> Test user login/logout scenarios at scale</li>
+                <li><strong>API Throttling:</strong> Verify rate limiting and error handling</li>
+                <li><strong>Mobile App Backend:</strong> Test mobile API endpoints under load</li>
+                <li><strong>Real-time Features:</strong> Test chat, live streaming, and notifications</li>
+            </ul>
+
+            <div class="highlight">
+                <strong>Recommendation:</strong> Use k6 for modern CI/CD integration and developer-friendly scripting. JMeter for complex protocols and if GUI-based test creation is preferred by QA team.
+            </div>
+        </div>
+
+        <div class="slide" id="ci-cd">
+            <h2>🔄 CI/CD Options: Jenkins vs GitHub Actions</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Jenkins</th>
+                        <th>GitHub Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Setup</td>
+                        <td>Self-hosted, requires maintenance</td>
+                        <td>Cloud-hosted, zero maintenance</td>
+                    </tr>
+                    <tr>
+                        <td>Infrastructure</td>
+                        <td>Complete control over environment</td>
+                        <td>Managed infrastructure</td>
+                    </tr>
+                    <tr>
+                        <td>Flexibility</td>
+                        <td>Highly customizable</td>
+                        <td>Good, with some limitations</td>
+                    </tr>
+                    <tr>
+                        <td>Plugin Ecosystem</td>
+                        <td>Massive (1800+ plugins)</td>
+                        <td>Growing marketplace</td>
+                    </tr>
+                    <tr>
+                        <td>Security</td>
+                        <td>Self-managed</td>
+                        <td>GitHub-managed</td>
+                    </tr>
+                    <tr>
+                        <td>Scalability</td>
+                        <td>Manual scaling required</td>
+                        <td>Auto-scaling</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>CI/CD Pipeline Architecture</h3>
+            <div class="architecture-diagram">
+                <div class="flow-item">Code Commit</div>
+                <span class="arrow">→</span>
+                <div class="flow-item">Trigger Build</div>
+                <span class="arrow">→</span>
+                <div class="flow-item">Unit Tests</div>
+                <span class="arrow">→</span>
+                <div class="flow-item">Integration Tests</div>
+                <br><br>
+                <div class="flow-item">UI Tests (Selenium/Playwright)</div>
+                <span class="arrow">→</span>
+                <div class="flow-item">Performance Tests</div>
+                <span class="arrow">→</span>
+                <div class="flow-item">Deploy to Staging</div>
+                <span class="arrow">→</span>
+                <div class="flow-item">Production Deploy</div>
+            </div>
+
+            <div class="highlight">
+                <strong>Hybrid Approach:</strong> Use GitHub Actions for development workflows and PR checks, Jenkins for complex deployment pipelines and enterprise integrations.
+            </div>
+        </div>
+
+        <div class="slide" id="roku">
+            <h2>📺 Roku API Testing</h2>
+            
+            <h3>Testing Strategies</h3>
+            <ul>
+                <li><strong>Roku Developer Tools:</strong> Use Roku's debugging and testing APIs</li>
+                <li><strong>Channel Certification:</strong> Automated testing for Roku store requirements</li>
+                <li><strong>Performance Monitoring:</strong> Memory usage, loading times, navigation response</li>
+                <li><strong>Deep Link Testing:</strong> Verify content launching from external sources</li>
+                <li><strong>Remote Control Simulation:</strong> Automated navigation testing</li>
+                <li><strong>Voice Command Testing:</strong> Roku voice remote functionality</li>
+            </ul>
+
+            <h3>Key Testing Areas</h3>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>Functional Testing</h4>
+                    <ul>
+                        <li>Channel installation/removal</li>
+                        <li>Content playback and streaming</li>
+                        <li>User authentication flows</li>
+                        <li>Search and discovery</li>
+                        <li>Parental controls</li>
+                        <li>Content recommendations</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>Performance Testing</h4>
+                    <ul>
+                        <li>Channel startup time</li>
+                        <li>Content loading performance</li>
+                        <li>Memory leak detection</li>
+                        <li>Network connectivity handling</li>
+                        <li>Error recovery scenarios</li>
+                        <li>Battery usage optimization</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Roku Testing Tools & APIs</h3>
+            <div class="code-block">
+<span class="comment">// Example Roku automation script</span>
+<span class="keyword">curl</span> <span class="string">-d ""</span> http://192.168.1.100:8060/keypress/Home
+<span class="keyword">curl</span> <span class="string">-d ""</span> http://192.168.1.100:8060/keypress/Select
+<span class="keyword">curl</span> <span class="string">-d ""</span> http://192.168.1.100:8060/launch/dev
+
+<span class="comment">// Device info API</span>
+<span class="keyword">curl</span> http://192.168.1.100:8060/query/device-info
+
+<span class="comment">// Media player controls</span>
+<span class="keyword">curl</span> <span class="string">-d ""</span> http://192.168.1.100:8060/keypress/Play
+<span class="keyword">curl</span> <span class="string">-d ""</span> http://192.168.1.100:8060/keypress/Pause
+
+<span class="comment">// Launch specific content</span>
+<span class="keyword">curl</span> <span class="string">-d ""</span> 'http://192.168.1.100:8060/launch/12?contentID=12345'
+            </div>
+        </div>
+
+        <div class="slide" id="challenges">
+            <h2>⚠️ Technical Challenges & Solutions</h2>
+            
+            <h3>Device Testing Complexity</h3>
+            <div class="challenge-section">
+                <h4>Cross-Platform Compatibility</h4>
+                <ul>
+                    <li><strong>Challenge:</strong> Testing across multiple devices (Roku, Fire TV, Apple TV, Smart TVs)</li>
+                    <li><strong>Solution:</strong> Implement device-agnostic test frameworks and cloud testing platforms</li>
+                    <li><strong>Approach:</strong> Use BrowserStack, Sauce Labs, or AWS Device Farm for comprehensive coverage</li>
+                </ul>
+            </div>
+
+            <h3>Integration Dependencies</h3>
+            <ul>
+                <li><strong>Third-party APIs:</strong> External content providers and authentication services</li>
+                <li><strong>CDN Dependencies:</strong> Content delivery network reliability and performance</li>
+                <li><strong>Payment Gateways:</strong> Subscription and billing system integrations</li>
+                <li><strong>Analytics Services:</strong> User behavior tracking and reporting systems</li>
+            </ul>
+
+            <h3>Test Data Management</h3>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>🎯 Strategies</h4>
+                    <ul>
+                        <li>Dynamic test data generation</li>
+                        <li>Data factories and builders</li>
+                        <li>Database seeding scripts</li>
+                        <li>Environment-specific datasets</li>
+                        <li>Test data cleanup automation</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚡ Challenges</h4>
+                    <ul>
+                        <li>Data privacy compliance (GDPR)</li>
+                        <li>Production data sanitization</li>
+                        <li>Multi-tenant data isolation</li>
+                        <li>Large dataset performance</li>
+                        <li>Data consistency across environments</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Performance Testing Challenges</h3>
+            <ul>
+                <li><strong>Video Streaming Load:</strong> Simulating realistic video consumption patterns</li>
+                <li><strong>Bandwidth Variations:</strong> Testing under different network conditions</li>
+                <li><strong>Peak Load Scenarios:</strong> Live events and popular content releases</li>
+                <li><strong>Geographic Distribution:</strong> Multi-region performance validation</li>
+                <li><strong>Mobile vs Connected TV:</strong> Different performance characteristics</li>
+            </ul>
+
+            <h3>Mitigation Strategies</h3>
+            <div class="highlight">
+                <ul>
+                    <li><strong>Test Environment Isolation:</strong> Dedicated testing infrastructure separate from production</li>
+                    <li><strong>Service Virtualization:</strong> Mock external dependencies for reliable testing</li>
+                    <li><strong>Comprehensive Monitoring:</strong> Real-time test execution monitoring and alerting</li>
+                    <li><strong>Gradual Rollout:</strong> Phased implementation with continuous feedback loops</li>
+                    <li><strong>Team Training:</strong> Ongoing education on testing tools and best practices</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide" id="poc">
+            <h2>🚀 POC: Selenium Page Object Model with IntelliJ & Jenkins</h2>
+            
+            <h3>Project Structure</h3>
+            <div class="code-block">
+src/
+├── main/java/
+│   ├── pages/
+│   │   ├── BasePage.java
+│   │   ├── LoginPage.java
+│   │   ├── HomePage.java
+│   │   ├── VideoPlayerPage.java
+│   │   └── ChannelGuidePage.java
+│   ├── utils/
+│   │   ├── DriverManager.java
+│   │   ├── ConfigReader.java
+│   │   ├── TestDataProvider.java
+│   │   └── ScreenshotUtil.java
+│   └── config/
+│       └── application.properties
+└── test/java/
+    ├── tests/
+    │   ├── BaseTest.java
+    │   ├── LoginTests.java
+    │   ├── VideoPlaybackTests.java
+    │   └── NavigationTests.java
+    └── resources/
+        └── testng.xml
+            </div>
+
+            <h3>Page Object Implementation</h3>
+            <div class="code-block">
+<span class="keyword">public class</span> LoginPage <span class="keyword">extends</span> BasePage {
+    <span class="comment">// Page elements</span>
+    <span class="keyword">@FindBy</span>(id = <span class="string">"email"</span>)
+    <span class="keyword">private</span> WebElement emailField;
+    
+    <span class="keyword">@FindBy</span>(id = <span class="string">"password"</span>)
+    <span class="keyword">private</span> WebElement passwordField;
+    
+    <span class="keyword">@FindBy</span>(xpath = <span class="string">"//button[@type='submit']"</span>)
+    <span class="keyword">private</span> WebElement loginButton;
+    
+    <span class="keyword">@FindBy</span>(className = <span class="string">"error-message"</span>)
+    <span class="keyword">private</span> WebElement errorMessage;
+    
+    <span class="comment">// Page actions</span>
+    <span class="keyword">public</span> HomePage login(String email, String password) {
+        emailField.clear();
+        emailField.sendKeys(email);
+        passwordField.clear();
+        passwordField.sendKeys(password);
+        loginButton.click();
+        waitForPageLoad();
+        <span class="keyword">return new</span> HomePage(driver);
+    }
+    
+    <span class="keyword">public boolean</span> isLoginErrorDisplayed() {
+        <span class="keyword">return</span> isElementPresent(By.className(<span class="string">"error-message"</span>));
+    }
+    
+    <span class="keyword">public</span> String getErrorMessage() {
+        <span class="keyword">return</span> errorMessage.getText();
+    }
+}
+            </div>
+
+            <h3>Test Implementation</h3>
+            <div class="code-block">
+<span class="keyword">public class</span> LoginTests <span class="keyword">extends</span> BaseTest {
+    
+    <span class="keyword">@Test</span>(priority = 1)
+    <span class="keyword">public void</span> testValidLogin() {
+        LoginPage loginPage = <span class="keyword">new</span> LoginPage(driver);
+        loginPage.navigateTo(ConfigReader.getProperty(<span class="string">"login.url"</span>));
+        
+        HomePage homePage = loginPage.login(
+            TestDataProvider.getValidEmail(), 
+            TestDataProvider.getValidPassword()
+        );
+        
+        Assert.assertTrue(homePage.isUserLoggedIn(), <span class="string">"User should be logged in"</span>);
+        Assert.assertTrue(homePage.isChannelGuideVisible(), <span class="string">"Channel guide should be visible"</span>);
+    }
+    
+    <span class="keyword">@Test</span>(priority = 2)
+    <span class="keyword">public void</span> testInvalidLogin() {
+        LoginPage loginPage = <span class="keyword">new</span> LoginPage(driver);
+        loginPage.navigateTo(ConfigReader.getProperty(<span class="string">"login.url"</span>));
+        
+        loginPage.login(<span class="string">"invalid@email.com"</span>, <span class="string">"wrongpassword"</span>);
+        
+        Assert.assertTrue(loginPage.isLoginErrorDisplayed(), <span class="string">"Error message should be displayed"</span>);
+        Assert.assertTrue(loginPage.getErrorMessage().contains(<span class="string">"Invalid credentials"</span>));
+    }
+    
+    <span class="keyword">@Test</span>(priority = 3)
+    <span class="keyword">public void</span> testEmptyFieldValidation() {
+        LoginPage loginPage = <span class="keyword">new</span> LoginPage(driver);
+        loginPage.navigateTo(ConfigReader.getProperty(<span class="string">"login.url"</span>));
+        
+        loginPage.login(<span class="string">""</span>, <span class="string">""</span>);
+        
+        Assert.assertTrue(loginPage.isLoginErrorDisplayed(), <span class="string">"Validation error should be shown"</span>);
+    }
+}
+            </div>
+
+            <h3>Jenkins Pipeline Configuration</h3>
+            <div class="code-block">
+<span class="keyword">pipeline</span> {
+    <span class="keyword">agent</span> any
+    
+    <span class="keyword">parameters</span> {
+        choice(name: <span class="string">'BROWSER'</span>, choices: [<span class="string">'chrome'</span>, <span class="string">'firefox'</span>, <span class="string">'edge'</span>], description: <span class="string">'Browser selection'</span>)
+        choice(name: <span class="string">'ENVIRONMENT'</span>, choices: [<span class="string">'staging'</span>, <span class="string">'qa'</span>, <span class="string">'production'</span>], description: <span class="string">'Environment'</span>)
+        choice(name: <span class="string">'TEST_SUITE'</span>, choices: [<span class="string">'smoke'</span>, <span class="string">'regression'</span>, <span class="string">'full'</span>], description: <span class="string">'Test suite'</span>)
+    }
+    
+    <span class="keyword">stages</span> {
+        <span class="keyword">stage</span>(<span class="string">'Checkout'</span>) {
+            <span class="keyword">steps</span> {
+                git branch: <span class="string">'main'</span>, url: <span class="string">'https://github.com/frndly/automation-tests'</span>
+            }
+        }
+        
+        <span class="keyword">stage</span>(<span class="string">'Build'</span>) {
+            <span class="keyword">steps</span> {
+                sh <span class="string">'mvn clean compile'</span>
+            }
+        }
+        
+        <span class="keyword">stage</span>(<span class="string">'Test Execution'</span>) {
+            <span class="keyword">parallel</span> {
+                <span class="keyword">stage</span>(<span class="string">'UI Tests'</span>) {
+                    <span class="keyword">steps</span> {
+                        sh <span class="string">"mvn test -Dbrowser=${params.BROWSER} -Denvironment=${params.ENVIRONMENT} -Dsuite=${params.TEST_SUITE}"</span>
+                    }
+                }
+                <span class="keyword">stage</span>(<span class="string">'API Tests'</span>) {
+                    <span class="keyword">steps</span> {
+                        sh <span class="string">'mvn test -Dtest=ApiTestSuite'</span>
+                    }
+                }
+            }
+        }
+        
+        <span class="keyword">stage</span>(<span class="string">'Performance Tests'</span>) {
+            <span class="keyword">when</span> {
+                expression { params.TEST_SUITE == <span class="string">'full'</span> }
+            }
+            <span class="keyword">steps</span> {
+                sh <span class="string">'k6 run performance-tests/load-test.js'</span>
+            }
+        }
+    }
+    
+    <span class="keyword">post</span> {
+        <span class="keyword">always</span> {
+            publishTestResults testResultsPattern: <span class="string">'target/surefire-reports/*.xml'</span>
+            publishHTML([
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: <span class="string">'target/surefire-reports'</span>,
+                reportFiles: <span class="string">'index.html'</span>,
+                reportName: <span class="string">'Test Report'</span>
+            ])
+            
+            <span class="comment">// Archive screenshots on failure</span>
+            archiveArtifacts artifacts: <span class="string">'target/screenshots/**/*.png'</span>, allowEmptyArchive: true
+            
+            <span class="comment">// Send notifications</span>
+            emailext (
+                subject: <span class="string">"Test Results: \${env.JOB_NAME} - \${env.BUILD_NUMBER}"</span>,
+                body: <span class="string">"Build: \${env.BUILD_URL}"</span>,
+                to: <span class="string">"\${env.CHANGE_AUTHOR_EMAIL}"</span>
+            )
+        }
+        <span class="keyword">failure</span> {
+            slackSend channel: <span class="string">'#qa-alerts'</span>, 
+                     color: <span class="string">'danger'</span>, 
+                     message: <span class="string">"Test Failed: \${env.JOB_NAME} - \${env.BUILD_NUMBER}"</span>
+        }
+        <span class="keyword">success</span> {
+            slackSend channel: <span class="string">'#qa-alerts'</span>, 
+                     color: <span class="string">'good'</span>, 
+                     message: <span class="string">"Tests Passed: \${env.JOB_NAME} - \${env.BUILD_NUMBER}"</span>
+        }
+    }
+}
+            </div>
+
+            <h3>IntelliJ Configuration & Best Practices</h3>
+            <ul>
+                <li><strong>TestNG Plugin:</strong> Install for better test execution and reporting</li>
+                <li><strong>Maven Integration:</strong> Configure for dependency management and build automation</li>
+                <li><strong>Code Templates:</strong> Create templates for Page Objects and Test classes</li>
+                <li><strong>Run Configurations:</strong> Set up different profiles for various browsers and environments</li>
+                <li><strong>Git Integration:</strong> Configure for version control and collaboration</li>
+                <li><strong>Code Quality Tools:</strong> SonarLint, Checkstyle for code standards</li>
+                <li><strong>Debugging Tools:</strong> Remote debugging for failed test troubleshooting</li>
+            </ul>
+
+            <h3>Advanced Page Object Features</h3>
+            <div class="code-block">
+<span class="keyword">public class</span> VideoPlayerPage <span class="keyword">extends</span> BasePage {
+    
+    <span class="keyword">@FindBy</span>(id = <span class="string">"video-player"</span>)
+    <span class="keyword">private</span> WebElement videoPlayer;
+    
+    <span class="keyword">@FindBy</span>(className = <span class="string">"play-button"</span>)
+    <span class="keyword">private</span> WebElement playButton;
+    
+    <span class="keyword">@FindBy</span>(className = <span class="string">"progress-bar"</span>)
+    <span class="keyword">private</span> WebElement progressBar;
+    
+    <span class="keyword">public void</span> playVideo() {
+        waitForElementClickable(playButton);
+        playButton.click();
+        waitForVideoToStart();
+    }
+    
+    <span class="keyword">public boolean</span> isVideoPlaying() {
+        <span class="keyword">return</span> (Boolean) executeJavaScript(
+            <span class="string">"return !arguments[0].paused"</span>, videoPlayer
+        );
+    }
+    
+    <span class="keyword">public</span> String getCurrentTime() {
+        <span class="keyword">return</span> (String) executeJavaScript(
+            <span class="string">"return arguments[0].currentTime"</span>, videoPlayer
+        );
+    }
+    
+    <span class="keyword">public void</span> seekToPosition(<span class="keyword">int</span> seconds) {
+        executeJavaScript(
+            <span class="string">"arguments[0].currentTime = arguments[1]"</span>, 
+            videoPlayer, seconds
+        );
+    }
+    
+    <span class="keyword">private void</span> waitForVideoToStart() {
+        WebDriverWait wait = <span class="keyword">new</span> WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(driver -> isVideoPlaying());
+    }
+}
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>📋 Implementation Roadmap</h2>
+            
+            <h3>Phase 1: Foundation (Weeks 1-4)</h3>
+            <ul>
+                <li>Set up Selenium Grid with Docker containers</li>
+                <li>Implement basic Page Object Model framework</li>
+                <li>Create login and navigation test suites</li>
+                <li>Set up Jenkins CI pipeline with basic reporting</li>
+                <li>Configure cross-browser testing matrix</li>
+                <li>Establish test data management strategy</li>
+            </ul>
+
+            <h3>Phase 2: Expansion (Weeks 5-8)</h3>
+            <ul>
+                <li>Add video playback testing scenarios</li>
+                <li>Implement performance testing with k6</li>
+                <li>Add Roku device testing automation</li>
+                <li>Set up comprehensive test reporting dashboards</li>
+                <li>Implement parallel test execution</li>
+                <li>Add visual regression testing capabilities</li>
+            </ul>
+
+            <h3>Phase 3: Optimization (Weeks 9-12)</h3>
+            <ul>
+                <li>Advanced error handling and test recovery</li>
+                <li>Performance benchmarking and SLA monitoring</li>
+                <li>Integration with monitoring and alerting systems</li>
+                <li>Team training and knowledge transfer</li>
+                <li>Documentation and best practices guide</li>
+                <li>Continuous improvement process establishment</li>
+            </ul>
+
+            <h3>Success Metrics & KPIs</h3>
+            <div class="highlight">
+                <ul>
+                    <li><strong>Test Coverage:</strong> 80% automated test coverage for critical user journeys</li>
+                    <li><strong>Execution Time:</strong> Sub-30-second feedback in CI/CD pipeline for smoke tests</li>
+                    <li><strong>Reliability:</strong> 95% test pass rate with less than 2% flaky tests</li>
+                    <li><strong>Defect Detection:</strong> 70% of bugs caught in automated testing before production</li>
+                    <li><strong>Team Efficiency:</strong> 50% reduction in manual testing effort</li>
+                    <li><strong>Release Velocity:</strong> Increase deployment frequency by 200%</li>
+                </ul>
+            </div>
+
+            <h3>Technology Stack Summary</h3>
+            <div class="architecture-diagram">
+                <div class="flow-item">Selenium WebDriver</div>
+                <span class="arrow">+</span>
+                <div class="flow-item">TestNG Framework</div>
+                <span class="arrow">+</span>
+                <div class="flow-item">Maven Build</div>
+                <br><br>
+                <div class="flow-item">Jenkins CI/CD</div>
+                <span class="arrow">+</span>
+                <div class="flow-item">Docker Grid</div>
+                <span class="arrow">+</span>
+                <div class="flow-item">k6 Performance</div>
+                <br><br>
+                <div class="flow-item">Roku API Testing</div>
+                <span class="arrow">+</span>
+                <div class="flow-item">Reporting Dashboard</div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🎯 Next Steps & Recommendations</h2>
+            
+            <h3>Immediate Actions (Week 1-2)</h3>
+            <ol>
+                <li><strong>Team Setup:</strong> Identify automation team members and assign roles</li>
+                <li><strong>Environment Preparation:</strong> Set up development and testing environments</li>
+                <li><strong>Tool Installation:</strong> Install and configure IntelliJ, Jenkins, and testing tools</li>
+                <li><strong>Repository Setup:</strong> Create Git repository structure and branching strategy</li>
+                <li><strong>Initial Training:</strong> Conduct Selenium and Page Object Model training sessions</li>
+            </ol>
+
+            <h3>Key Decision Points</h3>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>✅ Technology Decisions</h4>
+                    <ul>
+                        <li>Primary UI Testing: Selenium WebDriver with Java</li>
+                        <li>Test Framework: TestNG for better reporting and parallel execution</li>
+                        <li>Build Tool: Maven for dependency management</li>
+                        <li>CI/CD Platform: Jenkins for enterprise integration</li>
+                        <li>Performance Testing: k6 for modern load testing</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>🔄 Future Evaluations</h4>
+                    <ul>
+                        <li>Playwright assessment for advanced web testing</li>
+                        <li>GitHub Actions evaluation for simpler workflows</li>
+                        <li>Cloud testing platforms for device coverage</li>
+                        <li>Visual testing tools for UI regression</li>
+                        <li>AI-powered testing tools integration</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Risk Mitigation Strategies</h3>
+            <ul>
+                <li><strong>Test Maintenance:</strong> Regular review cycles and refactoring sessions</li>
+                <li><strong>Team Knowledge:</strong> Cross-training and documentation to avoid single points of failure</li>
+                <li><strong>Tool Dependencies:</strong> Vendor evaluation and backup plan development</li>
+                <li><strong>Environment Stability:</strong> Dedicated testing infrastructure and monitoring</li>
+                <li><strong>Performance Baseline:</strong> Establish SLA thresholds and trending analysis</li>
+            </ul>
+
+            <div class="highlight">
+                <strong>Final Recommendation:</strong> Start with the Selenium-based foundation, establish robust CI/CD integration, and gradually expand to include performance and device testing. Focus on building a sustainable, maintainable test automation framework that scales with the platform's growth.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple navigation enhancement
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.navigation a');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add slide animation on scroll
+            const slides = document.querySelectorAll('.slide');
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            slides.forEach(slide => {
+                slide.style.opacity = '0';
+                slide.style.transform = 'translateY(20px)';
+                slide.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(slide);
+            });
+
+            // Code syntax highlighting enhancement
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.addEventListener('click', function() {
+                    // Select all text in code block for easy copying
+                    const range = document.createRange();
+                    range.selectNodeContents(this);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+                        
